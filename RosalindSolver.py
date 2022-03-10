@@ -123,6 +123,71 @@ class RosalindSolver:
         print(f'[Output]: {curr_rabbits} pairs')
         
         return curr_rabbits
+    
+    def _cal_rabbit_pairs_v2(self,
+        n : int,
+        k : int,
+        cache : Dict[int, int]
+        ) -> int:
+        
+        """Predict # of rabbit pairs at n th generation in case of reproducing k offsprings
+        (implemented by memoization, top-down).
+    
+        Recurrence Relation
+            Fn = Fn-1 + 3 * Fn-2
+
+        Parameters
+        ----------
+        n : int
+            generation number
+        k : int
+            offspring number from a reproducable pair
+        cache : Dict[int, int]
+            Storage containing previous solutions (key: n, value: num_pairs)
+
+        Returns
+        -------
+        int
+            # of rabbit pairs
+        """
+
+        ## find from cache
+        if n in cache:
+            return cache[n]
+        
+        ## base case
+        if n < 3:
+            cache[n] = 1
+            return cache[n]
+        
+        ## recursive case
+        return 3 * self._cal_rabbit_pairs_v2(n - 2, k, cache) + self._cal_rabbit_pairs_v2(n - 1, k, cache)
+    
+    def cal_rabbit_pairs_v2(self,
+        n : int,
+        k : int
+        ) -> int:
+        
+        """Print input, output of _cal_rabbit_pairs_v2.
+        
+        Parameters
+        ----------
+        n : int
+            generation number
+        k : int
+            offspring number from a reproducable pair
+            
+        Returns
+        -------
+        int
+            # of rabbit pairs
+        """
+        
+        num_pairs = self._cal_rabbit_pairs_v2(n, k, dict())
+        print(f'[Input]: {n} th generation, {k} offspring from a pair')
+        print(f'[Output]: {num_pairs} pairs')
+        
+        return num_pairs
 
 
 if __name__ == '__main__':
@@ -138,6 +203,7 @@ if __name__ == '__main__':
         # solver.complement_strand(dna)
         
         n, k = 5, 3
-        solver.cal_rabbit_pairs(n, k)
-
+        # solver.cal_rabbit_pairs(n, k)
+        solver.cal_rabbit_pairs_v2(n, k)
+        
     main()
