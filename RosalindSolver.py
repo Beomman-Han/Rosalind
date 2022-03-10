@@ -189,6 +189,68 @@ class RosalindSolver:
         
         return num_pairs
 
+    def get_highest_gc(self,
+        fasta : str
+        ) -> str:
+        
+        """Get sequence ID and GC ratio which has the highesst GC(%)
+        from input fasta file.
+
+        Parameters
+        ----------
+        fasta : str
+            Path of input fasta file
+
+        Returns
+        -------
+        str
+            Seq ID and GC ratio
+        """
+        
+        ## initialize variables
+        id_max_gc, max_gc = '', 0
+        
+        fasta = open(fasta, 'r')
+        ## initialize variables
+        seq_id, seq = '', ''
+        for line in fasta:
+            if line[0] == '>':
+                ## sequence id line
+                if len(seq) == 0:
+                    ## if no seq, reset directly
+                    seq_id = line[1:].strip()
+                    seq = ''
+                    continue
+                
+                ## save previous sequence information
+                gc_count = seq.count('G') + seq.count('C')
+                gc_ratio = round(100 * gc_count / len(seq), 6)
+                
+                if gc_ratio >= max_gc:
+                    id_max_gc = seq_id
+                    max_gc = gc_ratio
+                
+                ## reset
+                seq_id = line[1:].strip()
+                seq = ''
+            else:
+                seq += line.strip().upper()
+        fasta.close()
+        
+        ## sequence id line
+        if len(seq) != 0:
+            ## save previous sequence information
+            gc_count = seq.count('G') + seq.count('C')
+            gc_ratio = round(100 * gc_count / len(seq), 6)
+        
+            if gc_ratio >= max_gc:
+                id_max_gc = seq_id
+                max_gc = gc_ratio
+        
+        answer = f'{id_max_gc}\n{max_gc}'
+        print(answer)
+        
+        return answer
 
 if __name__ == '__main__':
     def main():
@@ -202,8 +264,10 @@ if __name__ == '__main__':
         # dna = 'ATTCGTGGCTCTGGGGCCCGCGGATAACTGTAATGGCGAAATTGCGGACTATGACCCTGTTATCTAATCACAAAAACGGCGCTAGAAGTGACCCAGAATGTGTGCTGATCCGAATACATCTCACAACAAGTTTACCGCAACGCAACGGGCTTTGCGCTTTTCTAATGATTTGAAGACCGTGGCGAACATTGGCCTAATTACCCACTCTAGTTAATCCCAGACACTGGGGTCTCCAGCGACAGTAAGTCCAGTACATGAGACCAATCTACCAAGTGGTTGGGCACGGCGGTGGAATTACCTCCTCCTTGATCATTACTTTTGACTAATAGCTGTTCGAATTGTAAGCACGCAGGAGTGGCCTGGACGGAGTGTCCGATGCAGTTCGTGACGCCCCTTACGTACTAAGATCGTGGTTAATTCGTGGGATTTCAAAGGAATGGTGTGGTTCTTAGAACTGTCCCAGCCACGTTGGAGGTGCATCTGAATCTCTAGACGGGCCATATTCGGCCAATAGGAATAATCCCCGGGCTTCCTTCTTTAAAGCCACAAGGAGTTAGTAAGGGGGGAGCTATGATCGGTAAGTACGGCGTCCCCGAGGTGGTATCGAAACCGGATGTAACCATATCATCATTGTTATTGACATACGCTGTACTTTATACCAATCTCTCTTGCTCTAAGCGGTGATGTATAGTATATCGCCTCATTCACTGCTGTGACACGGGGAACCTTTGCCAAGCGTACGGTACCTGTAGGAAGTCGAACGGCGTACCGCAGAGCCCAGATCTACGTGCTAGGGCAAGGATATTCCCAGGTTACCAGCAGCATTAAGACTCCGGTATCGCAGAGTCTGCTTTGTCCAACCCGTCCTCGAATTGGTCAAGGCTTGGGTCGCTAGCTCTCGGACGTGTAGCCACTCCCTTTAGACTTTCCAGGTTCCAGCTGCCACGCAAAGCTCACCTCGCCAACCCA'
         # solver.complement_strand(dna)
         
-        n, k = 33, 5
-        solver.cal_rabbit_pairs(n, k)
-        solver.cal_rabbit_pairs_v2(n, k)
+        # n, k = 33, 5
+        # solver.cal_rabbit_pairs(n, k)
+        # solver.cal_rabbit_pairs_v2(n, k)
+        
+        solver.get_highest_gc('/Users/hanbeomman/Downloads/rosalind_gc.txt')
         
     main()
