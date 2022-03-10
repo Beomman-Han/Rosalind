@@ -117,7 +117,7 @@ class RosalindSolver:
         ## tabulation
         prev_rabbits, curr_rabbits = 1, 1
         for _ in range(n - 2):
-            prev_rabbits, curr_rabbits = curr_rabbits, curr_rabbits + 3 * prev_rabbits
+            prev_rabbits, curr_rabbits = curr_rabbits, curr_rabbits + k * prev_rabbits
         
         print(f'[Input]: {n} th generation, {k} offspring from a pair')
         print(f'[Output]: {curr_rabbits} pairs')
@@ -161,7 +161,7 @@ class RosalindSolver:
             return cache[n]
         
         ## recursive case
-        return 3 * self._cal_rabbit_pairs_v2(n - 2, k, cache) + self._cal_rabbit_pairs_v2(n - 1, k, cache)
+        return k * self._cal_rabbit_pairs_v2(n - 2, k, cache) + self._cal_rabbit_pairs_v2(n - 1, k, cache)
     
     def cal_rabbit_pairs_v2(self,
         n : int,
@@ -202,8 +202,8 @@ if __name__ == '__main__':
         # dna = 'ATTCGTGGCTCTGGGGCCCGCGGATAACTGTAATGGCGAAATTGCGGACTATGACCCTGTTATCTAATCACAAAAACGGCGCTAGAAGTGACCCAGAATGTGTGCTGATCCGAATACATCTCACAACAAGTTTACCGCAACGCAACGGGCTTTGCGCTTTTCTAATGATTTGAAGACCGTGGCGAACATTGGCCTAATTACCCACTCTAGTTAATCCCAGACACTGGGGTCTCCAGCGACAGTAAGTCCAGTACATGAGACCAATCTACCAAGTGGTTGGGCACGGCGGTGGAATTACCTCCTCCTTGATCATTACTTTTGACTAATAGCTGTTCGAATTGTAAGCACGCAGGAGTGGCCTGGACGGAGTGTCCGATGCAGTTCGTGACGCCCCTTACGTACTAAGATCGTGGTTAATTCGTGGGATTTCAAAGGAATGGTGTGGTTCTTAGAACTGTCCCAGCCACGTTGGAGGTGCATCTGAATCTCTAGACGGGCCATATTCGGCCAATAGGAATAATCCCCGGGCTTCCTTCTTTAAAGCCACAAGGAGTTAGTAAGGGGGGAGCTATGATCGGTAAGTACGGCGTCCCCGAGGTGGTATCGAAACCGGATGTAACCATATCATCATTGTTATTGACATACGCTGTACTTTATACCAATCTCTCTTGCTCTAAGCGGTGATGTATAGTATATCGCCTCATTCACTGCTGTGACACGGGGAACCTTTGCCAAGCGTACGGTACCTGTAGGAAGTCGAACGGCGTACCGCAGAGCCCAGATCTACGTGCTAGGGCAAGGATATTCCCAGGTTACCAGCAGCATTAAGACTCCGGTATCGCAGAGTCTGCTTTGTCCAACCCGTCCTCGAATTGGTCAAGGCTTGGGTCGCTAGCTCTCGGACGTGTAGCCACTCCCTTTAGACTTTCCAGGTTCCAGCTGCCACGCAAAGCTCACCTCGCCAACCCA'
         # solver.complement_strand(dna)
         
-        n, k = 5, 3
-        # solver.cal_rabbit_pairs(n, k)
+        n, k = 33, 5
+        solver.cal_rabbit_pairs(n, k)
         solver.cal_rabbit_pairs_v2(n, k)
         
     main()
