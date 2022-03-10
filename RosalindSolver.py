@@ -30,7 +30,7 @@ class RosalindSolver:
 
         ## init dictionary for counting        
         nuc_counts = {nuc : 0 for nuc in RosalindSolver.DNA_BASES}
-        for nuc in seq:
+        for nuc in seq.upper():
             try:
                 nuc_counts[nuc] += 1
             except KeyError:
