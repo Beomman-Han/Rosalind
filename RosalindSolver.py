@@ -415,6 +415,79 @@ class RosalindSolver:
         print()
 
         return motif_indices
+    
+    def find_consensus(self, fasta : str) -> str:
+        """Find the most common sequence (consensus) from input fasta file.
+        
+        (input sequences)
+        A T C C A G C T
+        G G G C A A C T
+        A T G G A T C T
+        A A G C A A C C
+        T T G G A A C T
+        A T G C C A T T
+        A T G G C A C T
+        | | | | | | | | 
+        5 1 0 0 5 5 0 0 (A)
+        0 0 1 4 2 0 6 1 (C)
+        1 1 6 3 0 1 0 0 (G)
+        1 5 0 0 0 1 1 6 (T)
+        | | | | | | | |
+        A T G C A A C T (Consensus)
+        
+        Parameters
+        ----------
+        fasta : str
+            Path of fasta file
+
+        Returns
+        -------
+        str
+            Consensus seqeucne
+        """
+        
+        import os, sys
+        sys.path.append(f'{os.path.dirname(__file__)}/pkgs')
+        # from pkgs.FASTA import FASTAProcessor
+        import pkgs.FASTA as fa
+        
+        proc = fa.FASTAProcessor(fasta)
+        proc.open()
+        
+        ## generator func
+        gen = proc.readline()
+        
+        ## first sequence
+        _, _, seq = next(gen)
+        
+        ## initialize profile matrix with zero
+        profile_mat = [[0 for _ in range(len(seq))] for _ in 'ACGT']
+        
+        BASES = ['A', 'C', 'G', 'T']
+        BASE_INDEX = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
+        for idx, base in enumerate(seq):
+            profile_mat[BASE_INDEX[base]][idx] += 1
+        
+        for _, _, seq in gen:
+            for idx, base in enumerate(seq):
+                profile_mat[BASE_INDEX[base]][idx] += 1
+        
+        consensus = ""
+        for i in range(len(profile_mat[0])):
+            max_idx, max_count = 0, 0
+            for j in range(len(profile_mat)):
+                base_count = profile_mat[j][i]
+                if base_count > max_count:
+                    max_count = base_count
+                    max_idx = j
+            consensus += BASES[max_idx]
+        
+        print(consensus)
+        for i in range(len(profile_mat)):
+            counts = ' '.join([str(count) for count in profile_mat[i]])
+            print(f'{BASES[i]}: {counts}')
+                    
+        return
 
 if __name__ == '__main__':
     def main():
@@ -446,8 +519,13 @@ if __name__ == '__main__':
         # sol = solver.translate(rna)
         # print(sol == 'MAMAPRTEINSTRING')
         
-        seq = 'CCAGGCTGTACAGCTGTACGCTGTACGGGCTGTACCATACGCTGTACACCCGGCTGTACTAACTACCTGCTGTACCGCTGTACCGCTGTACGCTGTACGCTGTACGCTGTACCGGTGCTGTACTGCTGTACTGCTGTACGCTGTACCGCTGTACGCTGTACCCTATCGGGGCTGTACTGCAAGCTGTACATGCTGTACATAGCTGTACATGCTGTACGGCTGTACCAGCTGTACGTAGCTGTACGATACACCCGGCTGTACGCTGTACAACGCTGTACGCTGTACACGGCGGCTGTACAGCTGTACCGCTGTACCTGCTGTACGCTGTACGGCTGTACCAACGCTGTACTGGCTGTACCATCAACAGGCTGTACTGCTGTACTGCTGTACGCTGTACCCGCTGTACACAGCTGTACGGGTGCTGTACAGCGCTGTACGCTGTACGCTGTACGCTGTACTCCAAGCTGTACATCGCTGTACGCTGTACGTGCCGCTGTACTAGCTGTACGCTGTACAAAGGGCTGTACCGGGGATCGCTGTACGGCTCAAACGCTGTACGGCTGTACTGCTGTACTCTGCTGTACAGCTGTACGCTGTACGCTGTACTCGGCTGTACCTCGTGCTGTACCGGCTGTACGCTGTACGCTGTACGCTGTACGGCTGTACCCGCTGTACGCTGTACGCTGTACAGCTGTACGGCTGTACAATAGCTGTACTCTGCTGTACGGGCTGTACGGGGAGGCTGTACGCTGTACATAGCTGTACGCTGTACTAGCTGTACATGGCTGTACCTTCTAATAGCTGTACACGGCTGTACATAGCTGTACAGCTGTACCAGGCTGTACAGCTGTACTGCTGTACGTCCAGAGTGGCTGTACTGCTGTACTATGCTGTACAGCTGTACGGCTGTACGCTGTACGAGCTGTACAGGCTGTACGTGCTGTACCT'
-        motif = 'GCTGTACGC'
-        solver.find_motif(motif, seq)
+        # seq = 'CCAGGCTGTACAGCTGTACGCTGTACGGGCTGTACCATACGCTGTACACCCGGCTGTACTAACTACCTGCTGTACCGCTGTACCGCTGTACGCTGTACGCTGTACGCTGTACCGGTGCTGTACTGCTGTACTGCTGTACGCTGTACCGCTGTACGCTGTACCCTATCGGGGCTGTACTGCAAGCTGTACATGCTGTACATAGCTGTACATGCTGTACGGCTGTACCAGCTGTACGTAGCTGTACGATACACCCGGCTGTACGCTGTACAACGCTGTACGCTGTACACGGCGGCTGTACAGCTGTACCGCTGTACCTGCTGTACGCTGTACGGCTGTACCAACGCTGTACTGGCTGTACCATCAACAGGCTGTACTGCTGTACTGCTGTACGCTGTACCCGCTGTACACAGCTGTACGGGTGCTGTACAGCGCTGTACGCTGTACGCTGTACGCTGTACTCCAAGCTGTACATCGCTGTACGCTGTACGTGCCGCTGTACTAGCTGTACGCTGTACAAAGGGCTGTACCGGGGATCGCTGTACGGCTCAAACGCTGTACGGCTGTACTGCTGTACTCTGCTGTACAGCTGTACGCTGTACGCTGTACTCGGCTGTACCTCGTGCTGTACCGGCTGTACGCTGTACGCTGTACGCTGTACGGCTGTACCCGCTGTACGCTGTACGCTGTACAGCTGTACGGCTGTACAATAGCTGTACTCTGCTGTACGGGCTGTACGGGGAGGCTGTACGCTGTACATAGCTGTACGCTGTACTAGCTGTACATGGCTGTACCTTCTAATAGCTGTACACGGCTGTACATAGCTGTACAGCTGTACCAGGCTGTACAGCTGTACTGCTGTACGTCCAGAGTGGCTGTACTGCTGTACTATGCTGTACAGCTGTACGGCTGTACGCTGTACGAGCTGTACAGGCTGTACGTGCTGTACCT'
+        # motif = 'GCTGTACGC'
+        # solver.find_motif(motif, seq)
+        
+        fasta = '/Users/hanbeomman/Documents/project/rosalind/test.fasta'
+        fasta = '/Users/hanbeomman/Downloads/rosalind_cons.txt'
+        solver.find_consensus(fasta)
+        
         
     main()
