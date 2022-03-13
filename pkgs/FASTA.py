@@ -52,7 +52,7 @@ class FASTAProcessor(FileProcessor):
         return
     
     def open(self,
-        file_name : str,
+        # file_name : str,
         mode : str = "r"
         ) -> None:
         
@@ -60,8 +60,8 @@ class FASTAProcessor(FileProcessor):
 
         Parameters
         ----------
-        file_name : str
-            The name of the file to open.
+        # file_name : str
+        #     The name of the file to open.
         mode : str
             Open mode (r, w, ...)
         """
@@ -70,7 +70,7 @@ class FASTAProcessor(FileProcessor):
             print('Current open_obj is already opened')
         else:
             self.open_mode = mode
-            self.open_obj = open(file_name, mode)
+            self.open_obj = open(self.path, mode)
         return
     
     def close(self) -> None:
