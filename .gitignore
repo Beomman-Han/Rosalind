@@ -1,5 +1,6 @@
 # Test files
 codon_table.txt
+*.fasta
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
