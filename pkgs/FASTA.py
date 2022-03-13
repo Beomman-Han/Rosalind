@@ -43,10 +43,10 @@ class FASTAProcessor(FileProcessor):
         Parameters
         ----------
         path : str
-            path of .fasta file
+            Absolute path of .fasta file
         """
         
-        self.path = path
+        self.path = os.path.abspath(path)
         self.open_obj = False
         
         return
