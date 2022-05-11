@@ -488,6 +488,41 @@ class RosalindSolver:
             print(f'{BASES[i]}: {counts}')
                     
         return
+    
+    def cal_mortal_rabbit(self,
+        n : int,
+        m : int
+        ) -> int:
+        
+        """Calculate the number of rabbits at n th month.
+        The rabbits die when they live m month. After 1 month from
+        birth, they could reproduce 1 pair of offspring.
+        
+        Recurrence relation :
+            F(n) = F(n-1) + F(n-2) (F(1)=F(2)=1, n < m+1)
+            F(n) = F(n-1) + ... + F(n-m) (n >= m+1)
+
+        Returns
+        -------
+        int
+            The number of rabbits
+        """
+        
+        if n < 3:
+            return 1
+        
+        generations = [1, 1]
+        for k in range(2, n):
+            if k < m:
+                generations.append(sum(generations[-2:]))
+            else:
+                if m == 1:
+                    generations.append(generations[-1])
+                else:
+                    generations.append(sum(generations[k-m:k-1]))
+        
+        return generations[-1]
+
 
 if __name__ == '__main__':
     def main():
@@ -523,9 +558,11 @@ if __name__ == '__main__':
         # motif = 'GCTGTACGC'
         # solver.find_motif(motif, seq)
         
-        fasta = '/Users/hanbeomman/Documents/project/rosalind/test.fasta'
-        fasta = '/Users/hanbeomman/Downloads/rosalind_cons.txt'
-        solver.find_consensus(fasta)
+        #fasta = '/Users/hanbeomman/Documents/project/rosalind/test.fasta'
+        #fasta = '/Users/hanbeomman/Downloads/rosalind_cons.txt'
+        #solver.find_consensus(fasta)
         
+        rabbits = solver.cal_mortal_rabbit(85, 18)
+        print(rabbits)
         
     main()
