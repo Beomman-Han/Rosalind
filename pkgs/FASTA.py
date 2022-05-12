@@ -69,6 +69,8 @@ def parse(fasta : str) -> Generator[SeqRecord, None, None]:
             else:
                 records.append(line)
 
+    yield SeqRecord(*records)
+
 
 if __name__ == "__main__":
     pass
