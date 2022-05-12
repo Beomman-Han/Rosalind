@@ -33,6 +33,15 @@ class SeqRecord:
         self.desc = desc
         
         return
+    
+    @property
+    def seq(self) -> str:
+        return self._seq.replace('\n', '')
+    
+    @seq.setter
+    def seq(self, _seq : str) -> None:
+        self._seq = _seq
+    
 
 def parse(fasta : str) -> Generator[SeqRecord, None, None]:
     

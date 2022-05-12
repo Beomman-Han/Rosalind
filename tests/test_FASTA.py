@@ -11,8 +11,8 @@ class TestFASTA(unittest.TestCase):
         self.fasta = './rosalind/problems/overlap_graph_case1.fasta'
         self.ids = ['Rosalind_0498', 'Rosalind_2391',
                     'Rosalind_2323', 'Rosalind_0442']
-        self.seqs = ['AAATAAA\n', 'AAATTTT\n',
-                     'TTTTCCC\n', 'AAATCCC\n']
+        self.seqs = ['AAATAAA', 'AAATTTT',
+                     'TTTTCCC', 'AAATCCC']
     
     def test_parse(self) -> None:
         for idx, seq_record in enumerate(FASTA.parse(self.fasta)):
